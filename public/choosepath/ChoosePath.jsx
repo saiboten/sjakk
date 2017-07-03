@@ -24,7 +24,7 @@ class ChoosePath extends React.Component {
 
         <div>
           <Link className="smallspace button" to="/adduser">Legg til bruker</Link>
-          <Link className="smallspace button" to="/tournament">Turneringer</Link>
+          <Link className="smallspace button" to="/tournaments">Turneringer</Link>
           <Link className="smallspace button" to="/statistics">Statistikk</Link>
         </div>
       </div>
