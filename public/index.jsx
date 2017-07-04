@@ -12,6 +12,8 @@ import AddUserPage from './adduser/AddUserPage';
 import ChoosePath from './choosepath/ChoosePath';
 import StatisticsPage from './statistics/StatisticsPage';
 import Tournament from './tournament/Tournament';
+import UserStatistics from './statistics/UserStatistics';
+
 
 require('./global.css');
 /*eslint-disable */
@@ -26,7 +28,7 @@ render((
       <Route path="/adduser" component={AddUserPage} />
       <Route path="/statistics" component={StatisticsPage} />
       <Route path="/tournament/:id" component={Tournament} />
-
+      <Route path="/user/:id" component={UserStatistics} />
     </div>
   </Router>
 ), document.getElementById('wrapper'));

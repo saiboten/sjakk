@@ -8,6 +8,12 @@ module.exports = {
     path: __dirname,
     filename: 'public/dist.js',
   },
+
+  /* devServer: { TODO why this no work?
+    contentBase: './public/',
+    inline: true,
+  },*/
+
   /* eslint: {
     configFile: '.eslintrc',
   }, */
