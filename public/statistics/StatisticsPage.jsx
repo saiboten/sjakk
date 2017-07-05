@@ -4,36 +4,44 @@ import {
   Link,
 } from 'react-router-dom';
 
+import firebase from '../firebase/FirebaseInit';
+
+const debug = require('debug')('StatisticsPage');
 
 class StatisticsPage extends React.Component {
-
-  static getUsers() {
-    return [{
-      id: '0',
-      name: 'Tobias',
-    },
-    {
-      id: '1',
-      name: 'Lars',
-    }];
-  }
 
   constructor(props) {
     super(props);
     this.state = {
-      users: StatisticsPage.getUsers(),
+      users: [],
     };
   }
 
+  componentDidMount() {
+    this.getUsers = this.getUsers.bind(this);
+    this.getUsers();
+  }
+
+  getUsers() {
+    const users = firebase.database().ref('users');
+    users.on('value', (snapshot) => {
+      debug('Got data: ', snapshot.val());
+      if (snapshot.val()) {
+        this.setState({
+          users: snapshot.val(),
+        });
+      }
+    });
+  }
 
   render() {
     const users = this.state.users.map(user => (
       <Link
-        key={user.id}
-        to={`/user/${user.id}`
+        key={user}
+        to={`/user/${user}`
       }
       >
-        {user.name}
+        {user}
       </Link>
     ));
 

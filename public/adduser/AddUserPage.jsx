@@ -1,25 +1,44 @@
 import React from 'react';
 import User from './User';
 import AddUserForm from './AddUserForm';
+import firebase from '../firebase/FirebaseInit';
+
+const debug = require('debug')('AddUserPage');
 
 class AddUserPage extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      users: ['Tobias', 'Lars', 'Torje', 'Halvor'],
+      users: [],
     };
+
+    this.loadUsers = this.loadUsers.bind(this);
     this.nameAdded = this.nameAdded.bind(this);
   }
 
+  componentDidMount() {
+    this.loadUsers();
+  }
+
+  loadUsers() {
+    const users = firebase.database().ref('users');
+    users.on('value', (snapshot) => {
+      debug('Got data: ', snapshot.val());
+      if (snapshot.val()) {
+        this.setState({
+          users: snapshot.val(),
+        });
+      }
+    });
+  }
+
   nameAdded(name) {
-    console.log(this.state.users);
+    debug(this.state.users);
     const newList = this.state.users.slice();
     newList.push(name);
 
-    this.setState({
-      users: newList,
-    });
+    firebase.database().ref('users').set(newList);
   }
 
   render() {
