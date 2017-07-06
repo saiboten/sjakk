@@ -2,39 +2,42 @@ import React from 'react';
 
 import TournamentRegistration from './TournamentRegistration';
 import TournamentList from './TournamentList';
+import firebase from '../firebase/FirebaseInit';
 
+const debug = require('debug')('TournamentPage');
 
 class TournamentPage extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      tournaments: [
-        {
-          name: 'Tobias sin rekeaften',
-          host: 'Tobias',
-          date: '10.10.2010',
-          id: 1,
-        },
-        {
-          name: 'Halvors taconight',
-          host: 'Halvor',
-          date: '10.10.2010',
-          id: 2,
-        },
-      ],
+      tournaments: [],
     };
 
     this.tournamentAdded = this.tournamentAdded.bind(this);
   }
 
+  componentDidMount() {
+    this.setupTournamentListener();
+  }
+
+  setupTournamentListener() {
+    const tournaments = firebase.database().ref('tournaments');
+    tournaments.on('value', (snapshot) => {
+      debug('Got data: ', snapshot.val());
+      if (snapshot.val()) {
+        this.setState({
+          tournaments: snapshot.val(),
+        });
+      }
+    });
+  }
+
   tournamentAdded(tournament) {
-    console.log(tournament);
+    debug('Adding tournament: ', tournament);
     const copy = this.state.tournaments.slice();
     copy.push(tournament);
-    this.setState({
-      tournaments: copy,
-    });
+    firebase.database().ref('tournaments').set(copy);
   }
 
   render() {
