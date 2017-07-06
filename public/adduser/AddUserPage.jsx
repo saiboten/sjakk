@@ -4,6 +4,7 @@ import AddUserForm from './AddUserForm';
 import firebase from '../firebase/FirebaseInit';
 
 const debug = require('debug')('AddUserPage');
+const uuidv1 = require('uuid/v1');
 
 class AddUserPage extends React.Component {
 
@@ -36,7 +37,10 @@ class AddUserPage extends React.Component {
   nameAdded(name) {
     debug(this.state.users);
     const newList = this.state.users.slice();
-    newList.push(name);
+    newList.push({
+      name,
+      id: uuidv1(),
+    });
 
     firebase.database().ref('users').set(newList);
   }
@@ -46,8 +50,8 @@ class AddUserPage extends React.Component {
       <div>
         <AddUserForm callback={this.nameAdded} />
         <ul>
-          {this.state.users.map(name => (
-            <User key={name} name={name} />
+          {this.state.users.map(user => (
+            <User key={user.id} name={user.name} />
          ))}
         </ul>
       </div>

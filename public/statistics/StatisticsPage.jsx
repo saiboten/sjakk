@@ -37,17 +37,19 @@ class StatisticsPage extends React.Component {
   render() {
     const users = this.state.users.map(user => (
       <Link
-        key={user}
-        to={`/user/${user}`
+        key={user.id}
+        to={`/user/${user.id}`
       }
       >
-        {user}
+        {user.name}
       </Link>
     ));
 
     return (
-      <div className="flex-row space-between"><h1>Velg bruker</h1>
-        <ul>{users}</ul>
+      <div><h1>Velg bruker</h1>
+        <div className="flex-column space-between">
+          {users}
+        </div>
       </div>);
   }
 }

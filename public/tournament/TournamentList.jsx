@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'; // ES6
 
 import {
   Link,
@@ -28,5 +29,9 @@ class TournamentList extends React.Component {
     </div>);
   }
 }
+
+TournamentList.propTypes = {
+  tournaments: PropTypes.array,
+};
 
 export default TournamentList;

@@ -7,7 +7,7 @@ import MatchRegistration from './MatchRegistration';
 
 class Tournament extends React.Component {
   render() {
-    return (<div>Tournament {this.props.match.params.id}
+    return (<div>Tournament {this.props.match.params.name}
       <MatchRegistration />
       <MatchList />
     </div>);

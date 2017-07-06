@@ -105,8 +105,8 @@ class Login extends React.Component {
   }
 
   render() {
-    const continuePlease = (<div>
-      <Link className="smallspace button" to="/adduser">Legg til bruker</Link>
+    const continuePlease = (<div className="flex-row">
+      <Link className="smallspace button" to="/adduser">Brukere</Link>
       <Link className="smallspace button" to="/tournaments">Turneringer</Link>
       <Link className="smallspace button" to="/statistics">Statistikk</Link>
       <Link className="smallspace button" to="/todo">Logg ut</Link>
