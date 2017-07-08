@@ -40,6 +40,7 @@ class AddUserPage extends React.Component {
     newList.push({
       name,
       id: uuidv1(),
+      rating: 1200,
     });
 
     firebase.database().ref('users').set(newList);
