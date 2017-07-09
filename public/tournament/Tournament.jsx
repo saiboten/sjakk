@@ -10,6 +10,39 @@ const uuidv1 = require('uuid/v1');
 
 class Tournament extends React.Component {
 
+  static storeMatchInUserList(player, matchId) {
+    const whiteMatchesList = firebase.database().ref(`users/${player}/matches`);
+
+    whiteMatchesList.once('value', (snapshot) => {
+      debug('Got white matches list: ', snapshot.val());
+      if (snapshot.val()) {
+        const matches = snapshot.val();
+        matches.push(matchId);
+        firebase.database().ref(`users/${player}/matches`).set(matches);
+      } else {
+        const matches = [];
+        matches.push(matchId);
+        firebase.database().ref(`users/${player}/matches`).set(matches);
+      }
+    });
+  }
+
+  static storeNewMatch(newMatch) {
+    const whiteMatchesList = firebase.database().ref(`matches/${newMatch.id}`);
+    whiteMatchesList.once('value', (snapshot) => {
+      debug('Got white matches list: ', snapshot.val());
+      if (snapshot.val()) {
+        const matches = snapshot.val();
+        matches.push(newMatch);
+        firebase.database().ref(`matches/${newMatch.id}`).set(matches);
+      } else {
+        const matches = [];
+        matches.push(newMatch);
+        firebase.database().ref(`matches/${newMatch.id}`).set(matches);
+      }
+    });
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -38,19 +71,34 @@ class Tournament extends React.Component {
 
   componentDidMount() {
     this.getUsers();
+    this.getMatches();
     this.addMatch = this.addMatch.bind(this);
   }
 
   getUsers() {
-    const users = firebase.database().ref('users');
-    users.on('value', (snapshot) => {
-      debug('Got data: ', snapshot.val());
+    const usersObject = firebase.database().ref('users');
+    usersObject.on('value', (snapshot) => {
+      debug('Got users: ', snapshot.val());
+
       if (snapshot.val()) {
+        const users = Object.values(snapshot.val());
         this.setState({
-          users: snapshot.val(),
-          white: snapshot.val()[0].id,
-          black: snapshot.val()[0].id,
+          users,
+          white: users[0].id,
+          black: users[0].id,
         });
+      }
+    });
+  }
+
+  getMatches() {
+    const users = firebase.database().ref(`tournaments/${this.props.match.params.id}/matches`);
+    users.on('value', (snapshot) => {
+      debug('Got matches: ', snapshot.val());
+      if (snapshot.val()) {
+        /* this.setState({
+          matches: snapshot.val(),
+        });*/
       }
     });
   }
@@ -74,19 +122,30 @@ class Tournament extends React.Component {
       blackInitialRating: blackPlayer.rating,
     };
 
-    const newMatchList = this.state.matches.slice();
+    Tournament.storeNewMatch(newMatch);
+    Tournament.storeMatchInUserList(matchData.white, newMatch.id);
+    Tournament.storeMatchInUserList(matchData.black, newMatch.id);
 
-    newMatchList.push(newMatch);
+    const tournamentMatches = firebase.database().ref(`tournaments/${this.props.match.params.id}/matches`);
 
-    this.setState({
-      matches: newMatchList,
+    tournamentMatches.once('value', (snapshot) => {
+      debug('Got tournament matches list: ', snapshot.val());
+      if (snapshot.val()) {
+        const matchIdList = snapshot.val();
+        matchIdList.push(newMatch.id);
+        firebase.database().ref(`tournaments/${this.props.match.params.id}/matches`).set(matchIdList);
+      } else {
+        const matchIdList = [];
+        matchIdList.push(newMatch.id);
+        firebase.database().ref(`tournaments/${this.props.match.params.id}/matches`).set(matchIdList);
+      }
     });
   }
 
   render() {
-    return (<div>Tournament {this.props.match.params.name}
+    return (<div>Tournament {this.props.match.params.id}
       <MatchRegistration callback={this.addMatch} />
-      <MatchList matches={this.state.matches} />
+      <MatchList matches={Object.values(this.state.matches)} />
     </div>);
   }
 }

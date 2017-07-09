@@ -27,14 +27,15 @@ class MatchRegistration extends React.Component {
   }
 
   getUsers() {
-    const users = firebase.database().ref('users');
-    users.on('value', (snapshot) => {
+    const usersObject = firebase.database().ref('users');
+    usersObject.on('value', (snapshot) => {
       debug('Got data: ', snapshot.val());
       if (snapshot.val()) {
+        const users = Object.values(snapshot.val());
         this.setState({
-          users: snapshot.val(),
-          white: snapshot.val()[0].id,
-          black: snapshot.val()[0].id,
+          users,
+          white: users[0].id,
+          black: users[0].id,
         });
       }
     });

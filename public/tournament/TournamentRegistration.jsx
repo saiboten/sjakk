@@ -37,7 +37,7 @@ class TournamentRegistration extends React.Component {
       debug('Got data: ', snapshot.val());
       if (snapshot.val()) {
         this.setState({
-          users: snapshot.val(),
+          users: Object.values(snapshot.val()),
         });
       }
     });

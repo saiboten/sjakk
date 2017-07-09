@@ -8,13 +8,16 @@ const debug = require('debug')('TournamentPage');
 
 class TournamentPage extends React.Component {
 
+  static tournamentAdded(tournament) {
+    debug('Adding tournament: ', tournament);
+    firebase.database().ref(`tournaments/${tournament.id}`).set(tournament);
+  }
+
   constructor(props) {
     super(props);
     this.state = {
-      tournaments: [],
+      tournaments: {},
     };
-
-    this.tournamentAdded = this.tournamentAdded.bind(this);
   }
 
   componentDidMount() {
@@ -33,18 +36,11 @@ class TournamentPage extends React.Component {
     });
   }
 
-  tournamentAdded(tournament) {
-    debug('Adding tournament: ', tournament);
-    const copy = this.state.tournaments.slice();
-    copy.push(tournament);
-    firebase.database().ref('tournaments').set(copy);
-  }
-
   render() {
     return (
       <div>
-        <TournamentRegistration callback={this.tournamentAdded} />
-        <TournamentList tournaments={this.state.tournaments} />
+        <TournamentRegistration callback={TournamentPage.tournamentAdded} />
+        <TournamentList tournaments={Object.values(this.state.tournaments)} />
       </div>);
   }
 }
