@@ -37,24 +37,6 @@ class Tournament extends React.Component {
       users: [],
       matches: [],
     };
-
-    /* {
-      id: 0,
-      white: 'Lars',
-      black: 'Halvor',
-      whiteInitialRating: 1200,
-      blackInitialRating: 1320,
-    },
-    {
-      id: 1,
-      white: 'Tobias',
-      black: 'Torje',
-      result: '1/2 - 1/2',
-      whiteInitialRating: 666,
-      blackInitialRating: 1337,
-      whiteRatingChange: 5,
-      blackRatingChange: -10,
-    } */
   }
 
   componentDidMount() {
@@ -126,8 +108,6 @@ class Tournament extends React.Component {
       id: uuidv1(),
       white: whitePlayer.name,
       black: blackPlayer.name,
-      whiteInitialRating: whitePlayer.rating,
-      blackInitialRating: blackPlayer.rating,
     };
 
     Tournament.storeNewMatch(newMatch);
