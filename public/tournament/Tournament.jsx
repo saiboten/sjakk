@@ -57,11 +57,11 @@ class Tournament extends React.Component {
       debug('Got users: ', snapshot.val());
 
       if (snapshot.val()) {
-        const users = Object.values(snapshot.val());
+        const users = snapshot.val();
         this.setState({
           users,
-          white: users[0].id,
-          black: users[0].id,
+          white: Object.values(users)[0].id,
+          black: Object.values(users)[0].id,
         });
       }
     });
@@ -96,19 +96,16 @@ class Tournament extends React.Component {
   addMatch(matchData) {
     debug('New match data: ', matchData);
 
-    const whitePlayer = this.state.users.filter(user => (
-      user.id === matchData.white
-    ))[0];
-
-    const blackPlayer = this.state.users.filter(user => (
-      user.id === matchData.black
-    ))[0];
+    const whitePlayer = this.state.users[matchData.white];
+    const blackPlayer = this.state.users[matchData.black];
 
     const newMatch = {
       id: uuidv1(),
-      white: whitePlayer.name,
-      black: blackPlayer.name,
+      white: whitePlayer.id,
+      black: blackPlayer.id,
     };
+
+    debug('New match data: ', newMatch);
 
     Tournament.storeNewMatch(newMatch);
     Tournament.storeMatchInUserList(matchData.white, newMatch.id);
@@ -133,7 +130,7 @@ class Tournament extends React.Component {
   render() {
     return (<div>Tournament {this.props.match.params.id}
       <MatchRegistration callback={this.addMatch} />
-      <MatchList matches={Object.values(this.state.matches)} />
+      <MatchList users={this.state.users} matches={Object.values(this.state.matches)} />
     </div>);
   }
 }

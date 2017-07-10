@@ -15,7 +15,9 @@ class MatchList extends React.Component {
       if (match.completed) {
         matchJsx = (<CompletedMatch key={match.id} match={match} />);
       } else {
-        matchJsx = (<UpcomingMatch key={match.id} match={match} />);
+        debug('this.props.users', this.props.users);
+        debug('match.white', match.white);
+        matchJsx = (<UpcomingMatch white={this.props.users[match.white]} black={this.props.users[match.black]} key={match.id} match={match} />);
       }
       return matchJsx;
     });
@@ -30,6 +32,7 @@ class MatchList extends React.Component {
 
 MatchList.propTypes = {
   matches: PropTypes.array,
+  users: PropTypes.object,
 };
 
 export default MatchList;

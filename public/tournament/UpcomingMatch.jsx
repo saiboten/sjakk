@@ -60,23 +60,33 @@ class UpcomingMatch extends React.Component {
   render() {
     const match = this.props.match;
 
-    return (<li key={match.id}>
-      {match.white} ({match.whiteInitialRating})
-      vs {match.black} ({match.blackInitialRating}):
-      <form onSubmit={this.storeWinner}>
-        <select value={this.state.winner} onChange={this.changeWinner}>
-          <option value="white">Hvit vant</option>
-          <option value="black">Svart vant</option>
-          <option value="remis">Remis/Uavgjort</option>
-        </select>
-        <input type="submit" value="Lagre" />
-      </form>
-    </li>);
+    debug('this.props.white: ', this.props.white);
+
+    let renderThis = (<li>Laster</li>);
+
+    if (this.props.white) {
+      renderThis = (<li key={match.id}>
+        {this.props.white.name} ({this.props.white.rating})
+        vs {this.props.black.name} ({this.props.black.rating}):
+        <form onSubmit={this.storeWinner}>
+          <select value={this.state.winner} onChange={this.changeWinner}>
+            <option value="white">Hvit vant</option>
+            <option value="black">Svart vant</option>
+            <option value="remis">Remis/Uavgjort</option>
+          </select>
+          <input type="submit" value="Lagre" />
+        </form>
+      </li>);
+    }
+
+    return renderThis;
   }
 }
 
 UpcomingMatch.propTypes = {
   match: PropTypes.object,
+  white: PropTypes.object,
+  black: PropTypes.object,
 };
 
 export default UpcomingMatch;
