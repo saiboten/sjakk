@@ -9,13 +9,17 @@ const debug = require('debug')('MatchList');
 
 class MatchList extends React.Component {
 
+  winnerSelected(winner) {
+    debug('Winner is: ', winner);
+  }
+
   render() {
     const matchList = this.props.matches.map((match) => {
       let matchJsx;
       if (match.result) {
         matchJsx = (<CompletedMatch key={match.id} match={match} />);
       } else {
-        matchJsx = (<UpcomingMatch key={match.id} match={match} />);
+        matchJsx = (<UpcomingMatch callback={this.winnerSelected} key={match.id} match={match} />);
       }
       return matchJsx;
     });
