@@ -22,13 +22,17 @@ class StatisticsPage extends React.Component {
     this.getUsers();
   }
 
+  componentWillUnmount() {
+    this.fireBaseUser.off();
+  }
+
   getUsers() {
-    const users = firebase.database().ref('users');
-    users.on('value', (snapshot) => {
+    this.fireBaseUser = firebase.database().ref('users');
+    this.fireBaseUser.on('value', (snapshot) => {
       debug('Got data: ', snapshot.val());
       if (snapshot.val()) {
         this.setState({
-          users: snapshot.val(),
+          users: Object.values(snapshot.val()),
         });
       }
     });

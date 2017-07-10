@@ -24,9 +24,13 @@ class TournamentPage extends React.Component {
     this.setupTournamentListener();
   }
 
+  componentWillUnmount() {
+    this.tournaments.off();
+  }
+
   setupTournamentListener() {
-    const tournaments = firebase.database().ref('tournaments');
-    tournaments.on('value', (snapshot) => {
+    this.tournaments = firebase.database().ref('tournaments');
+    this.tournaments.on('value', (snapshot) => {
       debug('Got data: ', snapshot.val());
       if (snapshot.val()) {
         this.setState({

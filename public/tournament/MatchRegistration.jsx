@@ -26,9 +26,13 @@ class MatchRegistration extends React.Component {
     this.getUsers();
   }
 
+  componentWillUnmount() {
+    this.fireBaseUser.off();
+  }
+
   getUsers() {
-    const usersObject = firebase.database().ref('users');
-    usersObject.on('value', (snapshot) => {
+    this.fireBaseUser = firebase.database().ref('users');
+    this.fireBaseUser.on('value', (snapshot) => {
       debug('Got data: ', snapshot.val());
       if (snapshot.val()) {
         const users = Object.values(snapshot.val());

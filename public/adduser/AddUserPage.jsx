@@ -8,10 +8,10 @@ const uuidv1 = require('uuid/v1');
 
 class AddUserPage extends React.Component {
 
-  static nameAdded(name) {
+  static nameAdded(data) {
     const user = {
-      name,
-      id: uuidv1(),
+      name: data.name,
+      id: data.email.replace(/\./, '-dot-'),
       rating: 1200,
     };
 
@@ -31,9 +31,13 @@ class AddUserPage extends React.Component {
     this.loadUsers();
   }
 
+  componentWillUnmount() {
+    this.fireBaseUser.off();
+  }
+
   loadUsers() {
-    const users = firebase.database().ref('users');
-    users.on('value', (snapshot) => {
+    this.fireBaseUser = firebase.database().ref('users');
+    this.fireBaseUser.on('value', (snapshot) => {
       debug('Got data: ', snapshot.val());
       if (snapshot.val()) {
         this.setState({

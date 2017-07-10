@@ -25,15 +25,22 @@ class TournamentRegistration extends React.Component {
     this.nameChanged = this.nameChanged.bind(this);
     this.hostChanged = this.hostChanged.bind(this);
     this.dateChanged = this.dateChanged.bind(this);
+    this.loadUsers = this.loadUsers.bind(this);
   }
 
   componentDidMount() {
+    debug('componentDidMount');
     this.loadUsers();
   }
 
+  componentWillUnmount() {
+    debug('componentWillUnmount');
+    this.fireBaseUser.off();
+  }
+
   loadUsers() {
-    const users = firebase.database().ref('users');
-    users.on('value', (snapshot) => {
+    this.fireBaseUser = firebase.database().ref('users');
+    this.fireBaseUser.on('value', (snapshot) => {
       debug('Got data: ', snapshot.val());
       if (snapshot.val()) {
         this.setState({

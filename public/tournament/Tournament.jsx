@@ -28,19 +28,7 @@ class Tournament extends React.Component {
   }
 
   static storeNewMatch(newMatch) {
-    const whiteMatchesList = firebase.database().ref(`matches/${newMatch.id}`);
-    whiteMatchesList.once('value', (snapshot) => {
-      debug('Got white matches list: ', snapshot.val());
-      if (snapshot.val()) {
-        const matches = snapshot.val();
-        matches.push(newMatch);
-        firebase.database().ref(`matches/${newMatch.id}`).set(matches);
-      } else {
-        const matches = [];
-        matches.push(newMatch);
-        firebase.database().ref(`matches/${newMatch.id}`).set(matches);
-      }
-    });
+    firebase.database().ref(`matches/${newMatch.id}`).set(newMatch);
   }
 
   constructor(props) {
@@ -75,9 +63,15 @@ class Tournament extends React.Component {
     this.addMatch = this.addMatch.bind(this);
   }
 
+  componentWillUnmount() {
+    this.fireBaseUser.off();
+    this.tournamentMatches.off();
+    this.matches.off();
+  }
+
   getUsers() {
-    const usersObject = firebase.database().ref('users');
-    usersObject.on('value', (snapshot) => {
+    this.fireBaseUser = firebase.database().ref('users');
+    this.fireBaseUser.on('value', (snapshot) => {
       debug('Got users: ', snapshot.val());
 
       if (snapshot.val()) {
@@ -91,15 +85,29 @@ class Tournament extends React.Component {
     });
   }
 
+
   getMatches() {
-    const users = firebase.database().ref(`tournaments/${this.props.match.params.id}/matches`);
-    users.on('value', (snapshot) => {
-      debug('Got matches: ', snapshot.val());
-      if (snapshot.val()) {
-        /* this.setState({
-          matches: snapshot.val(),
-        });*/
-      }
+    this.tournamentMatches = firebase.database().ref(`tournaments/${this.props.match.params.id}/matches`);
+    this.tournamentMatches.on('value', (snapshot) => {
+      const matchIdList = snapshot.val();
+      debug('Got matches: ', matchIdList);
+
+      this.matches = firebase.database().ref('matches');
+      this.matches.on('value', (matchesSnapshot) => {
+        const matchesWithData = matchesSnapshot.val();
+
+        if (matchesWithData) {
+          const matchList = matchIdList.map(matchId => (
+            matchesWithData[matchId]
+          ));
+
+          debug('Match list', matchList);
+
+          this.setState({
+            matches: matchList,
+          });
+        }
+      });
     });
   }
 
