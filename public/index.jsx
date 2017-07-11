@@ -24,6 +24,7 @@ render((
   <Router>
     <div>
       <Route path="/" component={Login} />
+      <Route path="/login" component={Login} />
       <Route path="/choosepath" component={ChoosePath} />
       <Route path="/tournaments" component={TournamentPage} />
       <Route path="/adduser" component={AddUserPage} />
