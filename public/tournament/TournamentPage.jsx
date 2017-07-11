@@ -3,6 +3,7 @@ import React from 'react';
 import TournamentRegistration from './TournamentRegistration';
 import TournamentList from './TournamentList';
 import firebase from '../firebase/FirebaseInit';
+import Container from '../container/Container';
 
 const debug = require('debug')('TournamentPage');
 
@@ -42,10 +43,10 @@ class TournamentPage extends React.Component {
 
   render() {
     return (
-      <div>
+      <Container>
         <TournamentRegistration callback={TournamentPage.tournamentAdded} />
         <TournamentList tournaments={Object.values(this.state.tournaments)} />
-      </div>);
+      </Container>);
   }
 }
 

@@ -7,6 +7,7 @@ import {
 import PropTypes from 'prop-types'; // ES6
 
 import firebase from '../firebase/FirebaseInit';
+import Container from '../container/Container';
 
 const debug = require('debug')('SelectUser');
 
@@ -129,13 +130,13 @@ class Login extends React.Component {
       </div>
     </form>);
 
-    return (<div>
+    return (<Container>
       <h1>Logg inn</h1>
 
       {this.state.loggedIn ? continuePlease : loginForm}
       {this.state.feedback}
 
-    </div>);
+    </Container>);
   }
 }
 

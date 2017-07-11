@@ -21,7 +21,7 @@ class MatchList extends React.Component {
     });
 
     return (
-      <ul>
+      <ul className="matchlist__ul__minitext">
         {matchList}
       </ul>
     );

@@ -5,6 +5,7 @@ import {
 } from 'react-router-dom';
 
 import firebase from '../firebase/FirebaseInit';
+import Container from '../container/Container';
 
 const debug = require('debug')('StatisticsPage');
 
@@ -50,11 +51,11 @@ class StatisticsPage extends React.Component {
     ));
 
     return (
-      <div><h1>Velg bruker</h1>
+      <Container><h1>Velg bruker</h1>
         <div className="flex-column space-between">
           {users}
         </div>
-      </div>);
+      </Container>);
   }
 }
 

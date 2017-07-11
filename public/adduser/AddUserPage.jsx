@@ -2,6 +2,7 @@ import React from 'react';
 import User from './User';
 import AddUserForm from './AddUserForm';
 import firebase from '../firebase/FirebaseInit';
+import Container from '../container/Container';
 
 const debug = require('debug')('AddUserPage');
 const uuidv1 = require('uuid/v1');
@@ -49,14 +50,14 @@ class AddUserPage extends React.Component {
 
   render() {
     return (
-      <div>
+      <Container>
         <AddUserForm callback={AddUserPage.nameAdded} />
         <ul>
           {this.state.users.map(user => (
             <User key={user.id} name={user.name} />
          ))}
         </ul>
-      </div>
+      </Container>
     );
   }
 }

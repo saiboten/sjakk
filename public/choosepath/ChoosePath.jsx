@@ -6,6 +6,7 @@ import {
 } from 'react-router-dom';
 
 import PropTypes from 'prop-types'; // ES6
+import Container from '../container/Container';
 
 const debug = require('debug')('ChoosePath');
 
@@ -19,7 +20,7 @@ class ChoosePath extends React.Component {
 
   render() {
     return (
-      <div>
+      <Container>
         <h1>Hva vil du gjøre?</h1>
 
         <div>
@@ -27,7 +28,7 @@ class ChoosePath extends React.Component {
           <Link className="smallspace button" to="/tournaments">Turneringer</Link>
           <Link className="smallspace button" to="/statistics">Statistikk</Link>
         </div>
-      </div>
+      </Container>
     );
   }
 }

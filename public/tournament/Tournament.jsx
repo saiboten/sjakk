@@ -4,6 +4,9 @@ import PropTypes from 'prop-types'; // ES6
 import MatchList from './MatchList';
 import MatchRegistration from './MatchRegistration';
 import firebase from '../firebase/FirebaseInit';
+import Container from '../container/Container';
+
+require('./tournament.css');
 
 const debug = require('debug')('Tournament');
 const uuidv1 = require('uuid/v1');
@@ -128,10 +131,10 @@ class Tournament extends React.Component {
   }
 
   render() {
-    return (<div>Tournament {this.props.match.params.id}
+    return (<Container>Tournament {this.props.match.params.id}
       <MatchRegistration callback={this.addMatch} />
       <MatchList users={this.state.users} matches={Object.values(this.state.matches)} />
-    </div>);
+    </Container>);
   }
 }
 
