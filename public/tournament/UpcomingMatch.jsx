@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import firebase from '../firebase/FirebaseInit';
+import ScoreCalculator from './ScoreCalculator';
 
 const debug = require('debug')('UpcomingMatch');
 
@@ -24,37 +25,10 @@ class UpcomingMatch extends React.Component {
     });
   }
 
-  /*     id: 1,
-      white: 'Tobias',
-      black: 'Torje',
-      result: '1/2 - 1/2',
-      whiteInitialRating: 666,
-      blackInitialRating: 1337,
-      whiteRatingChange: 5,
-      blackRatingChange: -10, */
-
   storeWinner(e) {
-    // TODO move this to somewhere else ...
     e.preventDefault();
     debug('Winner is ', this.state.winner);
-
-    const updatedObject = Object.assign({}, this.props.match);
-
-    updatedObject.completed = true;
-
-    if (this.state.winner === 'white') {
-      updatedObject.whiteWon = true;
-      updatedObject.whiteRatingChange = 10;
-      updatedObject.blackRatingChange = -9;
-    } else if (this.state.winner === 'black') {
-      updatedObject.blackWon = true;
-      updatedObject.blackRatingChange = 10;
-      updatedObject.whiteRatingChange = -11;
-    } else {
-      updatedObject.remis = true;
-    }
-
-    firebase.database().ref(`matches/${this.props.match.id}`).set(updatedObject);
+    ScoreCalculator.calculateScore(this.props.white, this.props.black, this.props.match, this.state.winner);
   }
 
   render() {

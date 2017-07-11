@@ -34,7 +34,7 @@ class Tournament extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      users: [],
+      users: {},
       matches: [],
     };
   }
@@ -78,7 +78,7 @@ class Tournament extends React.Component {
       this.matches.on('value', (matchesSnapshot) => {
         const matchesWithData = matchesSnapshot.val();
 
-        if (matchesWithData) {
+        if (matchesWithData && matchIdList) {
           const matchList = matchIdList.map(matchId => (
             matchesWithData[matchId]
           ));
