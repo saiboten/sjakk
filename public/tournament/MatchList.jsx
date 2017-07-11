@@ -13,10 +13,8 @@ class MatchList extends React.Component {
     const matchList = this.props.matches.map((match) => {
       let matchJsx;
       if (match.completed) {
-        matchJsx = (<CompletedMatch key={match.id} match={match} />);
+        matchJsx = (<CompletedMatch white={this.props.users[match.white]} black={this.props.users[match.black]} key={match.id} match={match} />);
       } else {
-        debug('this.props.users', this.props.users);
-        debug('match.white', match.white);
         matchJsx = (<UpcomingMatch white={this.props.users[match.white]} black={this.props.users[match.black]} key={match.id} match={match} />);
       }
       return matchJsx;

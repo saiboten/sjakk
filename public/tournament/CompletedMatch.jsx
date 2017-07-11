@@ -14,15 +14,17 @@ class CompletedMatch extends React.Component {
     }
 
     return (<li key={match.id}>
-      {match.white} ({match.whiteInitialRating + match.whiteRatingChange} {match.whiteRatingChange > 0 ? `+${match.whiteRatingChange}` : match.whiteRatingChange})
+      {this.props.white.name} ({match.whiteInitialRating + match.whiteRatingChange} {match.whiteRatingChange > 0 ? `+${match.whiteRatingChange}` : match.whiteRatingChange})
       - {result} -
-      {match.black} ({match.blackInitialRating + match.blackRatingChange} {match.blackRatingChange > 0 ? `+${match.blackRatingChange}` : match.blackRatingChange}):
+      {this.props.black.name} ({match.blackInitialRating + match.blackRatingChange} {match.blackRatingChange > 0 ? `+${match.blackRatingChange}` : match.blackRatingChange}):
     </li>);
   }
 }
 
 CompletedMatch.propTypes = {
   match: PropTypes.object,
+  white: PropTypes.object,
+  black: PropTypes.object,
 };
 
 export default CompletedMatch;
