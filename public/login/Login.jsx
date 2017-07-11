@@ -98,9 +98,11 @@ class Login extends React.Component {
   authChangeListener() {
     firebase.auth().onAuthStateChanged((user) => {
       debug('onAuthStateChanged. User logged in: ', user);
-      this.setState({
-        loggedIn: true,
-      });
+      if (user) {
+        this.setState({
+          loggedIn: true,
+        });
+      }
     });
   }
 
