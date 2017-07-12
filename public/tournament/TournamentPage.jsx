@@ -44,7 +44,9 @@ class TournamentPage extends React.Component {
   render() {
     return (
       <Container>
+        <h1>Registrer turnering</h1>
         <TournamentRegistration callback={TournamentPage.tournamentAdded} />
+        <h1>Turneringsliste</h1>
         <TournamentList tournaments={Object.values(this.state.tournaments)} />
       </Container>);
   }

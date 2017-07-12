@@ -9,9 +9,8 @@ import {
 class TournamentList extends React.Component {
 
   render() {
-    return (<div>Turneringer
-
-      <ul>
+    return (
+      <ul className="flex-column">
         {this.props.tournaments.map(tournament => (
 
           <Link
@@ -24,9 +23,7 @@ class TournamentList extends React.Component {
             {tournament.name}
           </Link>
        ))}
-      </ul>
-
-    </div>);
+      </ul>);
   }
 }
 

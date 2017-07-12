@@ -44,7 +44,7 @@ class AddUserForm extends React.Component {
   render() {
     return (
       <form onSubmit={this.submit}>
-        <div className="flex-column space-between">
+        <div className="flex-column space-between smallspace">
           <h1>Legg til bruker</h1>
           <label htmlFor="name">Navn</label><input onChange={this.nameChange} id="name" value={this.state.name} />
           <label htmlFor="email">Email</label><input onChange={this.emailChange} id="email" value={this.state.email} />

@@ -131,8 +131,10 @@ class Tournament extends React.Component {
   }
 
   render() {
-    return (<Container>Tournament {this.props.match.params.id}
+    return (<Container>
+      <h1>Registrer kamp</h1>
       <MatchRegistration callback={this.addMatch} />
+      <h1>Kampliste</h1>
       <MatchList users={this.state.users} matches={Object.values(this.state.matches)} />
     </Container>);
   }

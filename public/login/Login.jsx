@@ -108,7 +108,7 @@ class Login extends React.Component {
   }
 
   render() {
-    const continuePlease = (<div className="flex-row">
+    const continuePlease = (<div className="flex-column">
       <Link className="smallspace button" to="/adduser">Brukere</Link>
       <Link className="smallspace button" to="/tournaments">Turneringer</Link>
       <Link className="smallspace button" to="/statistics">Statistikk</Link>
@@ -131,11 +131,8 @@ class Login extends React.Component {
     </form>);
 
     return (<Container>
-      <h1>Logg inn</h1>
-
       {this.state.loggedIn ? continuePlease : loginForm}
       {this.state.feedback}
-
     </Container>);
   }
 }
