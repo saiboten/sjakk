@@ -6,6 +6,7 @@ import {
 
 import firebase from '../firebase/FirebaseInit';
 import Container from '../container/Container';
+import ScoreBoard from './ScoreBoard';
 
 const debug = require('debug')('StatisticsPage');
 
@@ -51,7 +52,9 @@ class StatisticsPage extends React.Component {
     ));
 
     return (
-      <Container><h1>Velg bruker</h1>
+      <Container>
+        <ScoreBoard />
+        <h1>Velg bruker</h1>
         <div className="flex-column space-between">
           {users}
         </div>
