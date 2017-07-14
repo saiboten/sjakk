@@ -13,9 +13,9 @@ class MatchList extends React.Component {
     const matchList = this.props.matches.map((match) => {
       let matchJsx;
       if (match.completed) {
-        matchJsx = (<CompletedMatch white={this.props.users[match.white]} black={this.props.users[match.black]} key={match.id} match={match} />);
+        matchJsx = (<CompletedMatch tournament={this.props.tournament} white={this.props.users[match.white]} black={this.props.users[match.black]} key={match.id} match={match} />);
       } else {
-        matchJsx = (<UpcomingMatch white={this.props.users[match.white]} black={this.props.users[match.black]} key={match.id} match={match} />);
+        matchJsx = (<UpcomingMatch tournament={this.props.tournament} white={this.props.users[match.white]} black={this.props.users[match.black]} key={match.id} match={match} />);
       }
       return matchJsx;
     });
@@ -31,6 +31,7 @@ class MatchList extends React.Component {
 MatchList.propTypes = {
   matches: PropTypes.array,
   users: PropTypes.object,
+  tournament: PropTypes.string,
 };
 
 export default MatchList;

@@ -106,6 +106,7 @@ class Tournament extends React.Component {
       id: uuidv1(),
       white: whitePlayer.id,
       black: blackPlayer.id,
+      tournament: this.props.match.params.id,
     };
 
     debug('New match data: ', newMatch);
@@ -135,7 +136,11 @@ class Tournament extends React.Component {
       <h1>Registrer kamp</h1>
       <MatchRegistration callback={this.addMatch} />
       <h1>Kampliste</h1>
-      <MatchList users={this.state.users} matches={Object.values(this.state.matches)} />
+      <MatchList
+        tournament={this.props.match.params.id}
+        users={this.state.users}
+        matches={Object.values(this.state.matches)}
+      />
     </Container>);
   }
 }

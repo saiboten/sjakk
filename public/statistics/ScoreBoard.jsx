@@ -25,9 +25,9 @@ class ScoreBoard extends React.Component {
   }
 
   render() {
-    const copyList = this.state.users.slice();
+    let copyList = this.state.users.slice();
 
-    copyList.sort((a, b) => (
+    copyList = copyList.sort((a, b) => (
       a.rating < b.rating
     ));
 
