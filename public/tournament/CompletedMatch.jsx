@@ -5,6 +5,8 @@ import firebase from '../firebase/FirebaseInit';
 
 const debug = require('debug')('CompletedMatch');
 
+require('./completedmatch.css');
+
 class CompletedMatch extends React.Component {
 
   static deleteListElementFromList(ref, itemid) {
@@ -34,25 +36,30 @@ class CompletedMatch extends React.Component {
       CompletedMatch.deleteListElementFromList(`users/${this.props.match.white}/matches`, this.props.match.id);
       CompletedMatch.deleteListElementFromList(`users/${this.props.match.black}/matches`, this.props.match.id);
       firebase.database().ref(`matches/${this.props.match.id}`).remove();
+
+      if (matchInfo.completed) {
+        debug('Match is completed. We need to restore user ratings');
+      }
     });
   }
 
   render() {
     const match = this.props.match;
 
-    let result = '1/2 - 1/2';
-
-    if (match.whiteWon) {
-      result = '1 - 0';
-    } else if (match.blackWon) {
-      result = '0 - 1';
-    }
-
-    return (<li key={match.id}>
-      {this.props.white.name} ({match.whiteInitialRating + match.whiteRatingChange} {match.whiteRatingChange > 0 ? `+${match.whiteRatingChange}` : match.whiteRatingChange})
-      - {result} -
-      {this.props.black.name} ({match.blackInitialRating + match.blackRatingChange} {match.blackRatingChange > 0 ? `+${match.blackRatingChange}` : match.blackRatingChange}):
-    <button onClick={this.deleteMatch}>Slett</button></li>);
+    return (<li className="flex-row space-between" key={match.id}>
+      <span className={match.whiteWon ? 'completedMatch__whitewon' : 'completedMatch__blackwon'}>
+        <div className="flex-column">
+          <div className="completedMatch__names">{this.props.white.name}</div>
+          <div className="completedMatch__rating">({match.whiteInitialRating + match.whiteRatingChange} {match.whiteRatingChange > 0 ? `+${match.whiteRatingChange}` : match.whiteRatingChange}) </div>
+        </div>
+      </span>
+      <span className={match.blackWon ? 'completedMatch__whitewon' : 'completedMatch__blackwon'}>
+        <div className="flex-column">
+          <div className="completedMatch__names">{this.props.black.name}</div>
+          <div className="completedMatch__rating"> ({match.blackInitialRating + match.blackRatingChange} {match.blackRatingChange > 0 ? `+${match.blackRatingChange}` : match.blackRatingChange}) </div>
+        </div>
+      </span>
+      <button onClick={this.deleteMatch}>Slett</button></li>);
   }
 }
 

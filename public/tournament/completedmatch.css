@@ -1,0 +1,15 @@
+.completedMatch__whitewon {
+  color: green;
+}
+
+.completedMatch__blackwon {
+  color: red;
+}
+
+.completedMatch__names {
+  font-size: 1.6em;
+}
+
+.completedMatch__rating {
+  font-size: 1.2em;
+}
