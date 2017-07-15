@@ -25,6 +25,31 @@ class CompletedMatch extends React.Component {
   constructor(props) {
     super(props);
     this.deleteMatch = this.deleteMatch.bind(this);
+    this.confirmDelete = this.confirmDelete.bind(this);
+    this.cancelConfirmDelete = this.cancelConfirmDelete.bind(this);
+
+    this.state = {
+      confirmedDelete: false,
+    };
+  }
+
+  confirmDelete() {
+    if (this.state.confirmedDelete) {
+      this.deleteMatch();
+    }
+
+    debug('Setting confirmedDelete to true');
+    this.setState({
+      confirmedDelete: true,
+    });
+  }
+
+  cancelConfirmDelete() {
+    debug('Setting confirmedDelete to false');
+
+    this.setState({
+      confirmedDelete: false,
+    });
   }
 
   deleteMatch() {
@@ -43,23 +68,42 @@ class CompletedMatch extends React.Component {
     });
   }
 
+  findPlayerCssClass(white) {
+    const match = this.props.match;
+
+    const youWon = (white && match.whiteWon) || (!white && match.blackWon);
+    const youLost = (white && match.blackWon) || (!white && match.whiteWon);
+
+    if (youWon) {
+      return 'completedMatch__won';
+    } else if (youLost) {
+      return 'completedMatch__lost';
+    }
+    return '';
+  }
+
   render() {
     const match = this.props.match;
 
+    let confirmDeleteMatchButton = (<span />);
+    if (this.state.confirmedDelete) {
+      confirmDeleteMatchButton = (<button onClick={this.cancelConfirmDelete}>Avbryt</button>);
+    }
+
     return (<li className="flex-row space-between" key={match.id}>
-      <span className={match.whiteWon ? 'completedMatch__whitewon' : 'completedMatch__blackwon'}>
+      <span className={this.findPlayerCssClass(true)}>
         <div className="flex-column">
           <div className="completedMatch__names">{this.props.white.name}</div>
           <div className="completedMatch__rating">({match.whiteInitialRating + match.whiteRatingChange} {match.whiteRatingChange > 0 ? `+${match.whiteRatingChange}` : match.whiteRatingChange}) </div>
         </div>
       </span>
-      <span className={match.blackWon ? 'completedMatch__whitewon' : 'completedMatch__blackwon'}>
+      <span className={this.findPlayerCssClass(false)}>
         <div className="flex-column">
           <div className="completedMatch__names">{this.props.black.name}</div>
           <div className="completedMatch__rating"> ({match.blackInitialRating + match.blackRatingChange} {match.blackRatingChange > 0 ? `+${match.blackRatingChange}` : match.blackRatingChange}) </div>
         </div>
       </span>
-      <button onClick={this.deleteMatch}>Slett</button></li>);
+      <button onClick={this.confirmDelete}>Slett</button>{confirmDeleteMatchButton}</li>);
   }
 }
 

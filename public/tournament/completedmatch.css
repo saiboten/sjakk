@@ -1,8 +1,8 @@
-.completedMatch__whitewon {
+.completedMatch__won {
   color: green;
 }
 
-.completedMatch__blackwon {
+.completedMatch__lost {
   color: red;
 }
 
