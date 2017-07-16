@@ -6,6 +6,8 @@ import ScoreCalculator from './ScoreCalculator';
 
 const debug = require('debug')('UpcomingMatch');
 
+require('./upcomingmatch.css');
+
 class UpcomingMatch extends React.Component {
 
   constructor(props) {
@@ -29,6 +31,8 @@ class UpcomingMatch extends React.Component {
     }
     this.setState({
       remisConfirmed: true,
+      whiteWonConfirmed: false,
+      blackWonConfirmed: false,
     });
   }
 
@@ -38,6 +42,8 @@ class UpcomingMatch extends React.Component {
     }
     this.setState({
       blackWonConfirmed: true,
+      whiteWonConfirmed: false,
+      remisConfirmed: false,
     });
   }
 
@@ -47,6 +53,8 @@ class UpcomingMatch extends React.Component {
     }
     this.setState({
       whiteWonConfirmed: true,
+      blackWonConfirmed: false,
+      remisConfirmed: false,
     });
   }
 
@@ -65,19 +73,19 @@ class UpcomingMatch extends React.Component {
     if (this.props.white) {
       renderThis = (
         <li className="flex-row space-between smallspace" key={match.id}>
-          <button className={this.state.whiteWonConfirmed ? 'completedMatch__won' : 'completedMatch__tie'} onClick={this.whiteWon}>
+          <button className={this.state.whiteWonConfirmed ? 'completedMatch__won upcomingMatch__player__button' : 'completedMatch__tie upcomingMatch__player__button'} onClick={this.whiteWon}>
             <div className="flex-column">
               <div className="completedMatch__names">{this.props.white.name}</div>
-              <div className="completedMatch__rating">({this.props.white.rating}) </div>
+              <div className="completedMatch__rating">{this.props.white.rating} </div>
             </div>
           </button>
-          <button className={this.state.blackWonConfirmed ? 'completedMatch__won' : 'completedMatch__tie'} onClick={this.blackWon}>
+          <button className={this.state.blackWonConfirmed ? 'completedMatch__won upcomingMatch__player__button' : 'completedMatch__tie upcomingMatch__player__button'} onClick={this.blackWon}>
             <div className="flex-column">
               <div className="completedMatch__names">{this.props.black.name}</div>
-              <div className="completedMatch__rating"> ({this.props.black.rating})</div>
+              <div className="completedMatch__rating"> {this.props.black.rating}</div>
             </div>
           </button>
-          <button className="button" onClick={this.remisConfirm}>{this.state.remisConfirmed ? 'Bekreft remis' : 'Remis'}</button>
+          <button className="button upcomingMatch__remis_button" onClick={this.remisConfirm}>{this.state.remisConfirmed ? 'Bekreft' : 'Remis'}</button>
         </li>);
     }
 

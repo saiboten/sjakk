@@ -91,23 +91,23 @@ class CompletedMatch extends React.Component {
 
     let confirmDeleteMatchButton = (<span style={displayNone} />);
     if (this.state.confirmedDelete) {
-      confirmDeleteMatchButton = (<button className="button" onClick={this.cancelConfirmDelete}>Avbryt</button>);
+      confirmDeleteMatchButton = (<button className="button completedMatch__deleteMatch__button" onClick={this.cancelConfirmDelete}>Avbryt</button>);
     }
 
     return (<li className="flex-row space-between smallspace" key={match.id}>
       <span className={this.findPlayerCssClass(true)}>
         <div className="flex-column">
           <div className="completedMatch__names">{this.props.white.name}</div>
-          <div className="completedMatch__rating">({match.whiteInitialRating + match.whiteRatingChange} {match.whiteRatingChange > 0 ? `+${match.whiteRatingChange}` : match.whiteRatingChange}) </div>
+          <div className="completedMatch__rating">{match.whiteInitialRating + match.whiteRatingChange} {match.whiteRatingChange > 0 ? `+${match.whiteRatingChange}` : match.whiteRatingChange} </div>
         </div>
       </span>
       <span className={this.findPlayerCssClass(false)}>
         <div className="flex-column">
           <div className="completedMatch__names">{this.props.black.name}</div>
-          <div className="completedMatch__rating"> ({match.blackInitialRating + match.blackRatingChange} {match.blackRatingChange > 0 ? `+${match.blackRatingChange}` : match.blackRatingChange}) </div>
+          <div className="completedMatch__rating"> {match.blackInitialRating + match.blackRatingChange} {match.blackRatingChange > 0 ? `+${match.blackRatingChange}` : match.blackRatingChange} </div>
         </div>
       </span>
-      <button className="button" onClick={this.confirmDelete}>Slett</button>{confirmDeleteMatchButton}</li>);
+      <span className="flex-column space-between"><button className="completedMatch__deleteMatch__button button" onClick={this.confirmDelete}>{this.state.confirmedDelete ? 'Bekreft' : 'Slett'}</button>{confirmDeleteMatchButton}</span></li>);
   }
 }
 

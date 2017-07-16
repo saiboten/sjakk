@@ -6,6 +6,8 @@ import {
   BrowserRouter as Router, Route, Link,
 } from 'react-router-dom';
 
+import moment from 'moment';
+
 import Login from './login/Login';
 import TournamentPage from './tournament/TournamentPage';
 import ChoosePath from './choosepath/ChoosePath';
@@ -17,6 +19,8 @@ require('./global.css');
 /*eslint-disable */
 require('babel-polyfill');
 /*eslint-enable */
+
+moment.locale('nb_NO');
 
 const App = () => (
   <Router>
