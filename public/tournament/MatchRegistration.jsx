@@ -15,6 +15,7 @@ class MatchRegistration extends React.Component {
       white: undefined,
       date: moment(),
       users: [],
+      feedback: '',
     };
 
     this.submit = this.submit.bind(this);
@@ -49,6 +50,7 @@ class MatchRegistration extends React.Component {
     debug('White changed', e.target.value);
     this.setState({
       white: e.target.value,
+      feedback: '',
     });
   }
 
@@ -56,17 +58,25 @@ class MatchRegistration extends React.Component {
     debug('Black changed', e.target.value);
     this.setState({
       black: e.target.value,
+      feedback: '',
     });
   }
 
   submit(e) {
     e.preventDefault();
     debug('Submit', this.state);
-    this.props.callback({
-      white: this.state.white,
-      black: this.state.black,
-      date: this.state.date.format(),
-    });
+
+    if (this.state.black === this.state.white) {
+      this.setState({
+        feedback: 'En spiller kan ikke spille mot seg selv',
+      });
+    } else {
+      this.props.callback({
+        white: this.state.white,
+        black: this.state.black,
+        date: this.state.date.format(),
+      });
+    }
   }
 
   render() {
@@ -84,6 +94,7 @@ class MatchRegistration extends React.Component {
         </select>
       </div>
       <input className="button" type="submit" value="Legg til kamp" />
+      <p>{this.state.feedback}</p>
     </form>);
   }
 }

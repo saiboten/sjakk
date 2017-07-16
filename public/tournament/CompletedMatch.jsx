@@ -85,12 +85,16 @@ class CompletedMatch extends React.Component {
   render() {
     const match = this.props.match;
 
-    let confirmDeleteMatchButton = (<span />);
+    const displayNone = {
+      display: 'none',
+    };
+
+    let confirmDeleteMatchButton = (<span style={displayNone} />);
     if (this.state.confirmedDelete) {
-      confirmDeleteMatchButton = (<button onClick={this.cancelConfirmDelete}>Avbryt</button>);
+      confirmDeleteMatchButton = (<button className="button" onClick={this.cancelConfirmDelete}>Avbryt</button>);
     }
 
-    return (<li className="flex-row space-between" key={match.id}>
+    return (<li className="flex-row space-between smallspace" key={match.id}>
       <span className={this.findPlayerCssClass(true)}>
         <div className="flex-column">
           <div className="completedMatch__names">{this.props.white.name}</div>
@@ -103,7 +107,7 @@ class CompletedMatch extends React.Component {
           <div className="completedMatch__rating"> ({match.blackInitialRating + match.blackRatingChange} {match.blackRatingChange > 0 ? `+${match.blackRatingChange}` : match.blackRatingChange}) </div>
         </div>
       </span>
-      <button onClick={this.confirmDelete}>Slett</button>{confirmDeleteMatchButton}</li>);
+      <button className="button" onClick={this.confirmDelete}>Slett</button>{confirmDeleteMatchButton}</li>);
   }
 }
 

@@ -8,11 +8,10 @@ import {
 
 import Login from './login/Login';
 import TournamentPage from './tournament/TournamentPage';
-import AddUserPage from './adduser/AddUserPage';
 import ChoosePath from './choosepath/ChoosePath';
-import StatisticsPage from './statistics/StatisticsPage';
+import UsersPage from './users/UsersPage';
 import Tournament from './tournament/Tournament';
-import UserStatistics from './statistics/UserStatistics';
+import UserStatistics from './users/UserStatistics';
 
 require('./global.css');
 /*eslint-disable */
@@ -26,8 +25,7 @@ const App = () => (
       <Route path="/login" component={Login} />
       <Route path="/choosepath" component={ChoosePath} />
       <Route path="/tournaments" component={TournamentPage} />
-      <Route path="/adduser" component={AddUserPage} />
-      <Route path="/statistics" component={StatisticsPage} />
+      <Route path="/users" component={UsersPage} />
       <Route path="/tournament/:id" component={Tournament} />
       <Route path="/user/:id" component={UserStatistics} />
     </div>

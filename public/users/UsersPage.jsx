@@ -7,10 +7,11 @@ import {
 import firebase from '../firebase/FirebaseInit';
 import Container from '../container/Container';
 import ScoreBoard from './ScoreBoard';
+import AddUserForm from './AddUserForm';
 
 const debug = require('debug')('StatisticsPage');
 
-class StatisticsPage extends React.Component {
+class UsersPage extends React.Component {
 
   constructor(props) {
     super(props);
@@ -54,7 +55,8 @@ class StatisticsPage extends React.Component {
     return (
       <Container>
         <ScoreBoard />
-        <h1>Velg bruker</h1>
+        <AddUserForm />
+        <h1>Brukere</h1>
         <div className="flex-column space-between">
           {users}
         </div>
@@ -62,4 +64,4 @@ class StatisticsPage extends React.Component {
   }
 }
 
-module.exports = StatisticsPage;
+module.exports = UsersPage;

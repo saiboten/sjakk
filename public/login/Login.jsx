@@ -109,9 +109,8 @@ class Login extends React.Component {
 
   render() {
     const continuePlease = (<div className="flex-column">
-      <Link className="smallspace button" to="/adduser">Brukere</Link>
+      <Link className="smallspace button" to="/users">Brukere</Link>
       <Link className="smallspace button" to="/tournaments">Turneringer</Link>
-      <Link className="smallspace button" to="/statistics">Statistikk</Link>
       <Link className="smallspace button" to="/login">Logg ut</Link>
     </div>);
 

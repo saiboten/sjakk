@@ -37,7 +37,7 @@ class ScoreBoard extends React.Component {
 
     return (
       <div>
-        <h1>Scoreboard</h1>
+        <h1>Ratingoversikt</h1>
         <ul className="flex-column">
           {scoreboardlist}
         </ul>

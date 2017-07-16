@@ -1,9 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types'; // ES6
 
-import User from './User';
+import firebase from '../firebase/FirebaseInit';
 
 class AddUserForm extends React.Component {
+
+  static nameAdded(data) {
+    const user = {
+      name: data.name,
+      id: data.email.replace(/\./, '-dot-'),
+      rating: 1200,
+    };
+
+    firebase.database().ref(`users/${user.id}`).set(user);
+  }
 
   constructor(props) {
     super(props);
@@ -19,7 +29,7 @@ class AddUserForm extends React.Component {
 
   submit(e) {
     e.preventDefault();
-    this.props.callback({
+    AddUserForm.nameAdded({
       name: this.state.name,
       email: this.state.email,
     });
@@ -45,7 +55,7 @@ class AddUserForm extends React.Component {
     return (
       <form onSubmit={this.submit}>
         <div className="flex-column space-between smallspace">
-          <h1>Legg til bruker</h1>
+          <h1>Legg til ny bruker</h1>
           <label htmlFor="name">Navn</label><input onChange={this.nameChange} id="name" value={this.state.name} />
           <label htmlFor="email">Email</label><input onChange={this.emailChange} id="email" value={this.state.email} />
 

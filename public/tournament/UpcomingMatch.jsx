@@ -11,7 +11,7 @@ class UpcomingMatch extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      winner: 'remis',
+      winner: 'white',
     };
 
     this.changeWinner = this.changeWinner.bind(this);
@@ -39,18 +39,29 @@ class UpcomingMatch extends React.Component {
     let renderThis = (<li>Laster</li>);
 
     if (this.props.white) {
-      renderThis = (<li key={match.id}>
-        {this.props.white.name} ({this.props.white.rating})
-        vs {this.props.black.name} ({this.props.black.rating}):
-        <form onSubmit={this.storeWinner}>
-          <select value={this.state.winner} onChange={this.changeWinner}>
-            <option value="white">Hvit vant</option>
-            <option value="black">Svart vant</option>
-            <option value="remis">Remis/Uavgjort</option>
-          </select>
-          <input type="submit" value="Lagre" />
-        </form>
-      </li>);
+      renderThis = (
+        <li className="flex-row space-between smallspace" key={match.id}>
+          <span className="completedMatch__tie">
+            <div className="flex-column">
+              <div className="completedMatch__names">{this.props.white.name}</div>
+              <div className="completedMatch__rating">({this.props.white.rating}) </div>
+            </div>
+          </span>
+          <span className="completedMatch__tie">
+            <div className="flex-column">
+              <div className="completedMatch__names">{this.props.black.name}</div>
+              <div className="completedMatch__rating"> ({this.props.black.rating})</div>
+            </div>
+          </span>
+          <form onSubmit={this.storeWinner}>
+            <select value={this.state.winner} onChange={this.changeWinner}>
+              <option value="white">{this.props.white.name} vant</option>
+              <option value="black">{this.props.black.name} vant</option>
+              <option value="remis">Remis/Uavgjort</option>
+            </select>
+            <input type="submit" value="Lagre" />
+          </form>
+        </li>);
     }
 
     return renderThis;

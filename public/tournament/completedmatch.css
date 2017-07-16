@@ -1,15 +1,26 @@
+.completedMatch__tie {
+  border: 2px solid black;
+  padding: 5px;
+}
+
 .completedMatch__won {
-  color: green;
+  color: white;
+  background-color: green;
+  border: 2px solid #092900;
+  padding: 5px;
 }
 
 .completedMatch__lost {
-  color: red;
+  color: white;
+  background-color: red;
+  border: 2px solid #092900;
+  padding: 5px;
 }
 
 .completedMatch__names {
-  font-size: 1.6em;
+  font-size: 1em;
 }
 
 .completedMatch__rating {
-  font-size: 1.2em;
+  font-size: 0.8em;
 }
