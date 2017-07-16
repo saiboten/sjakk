@@ -79,7 +79,7 @@ class CompletedMatch extends React.Component {
     } else if (youLost) {
       return 'completedMatch__lost';
     }
-    return '';
+    return 'completedMatch__tie';
   }
 
   render() {

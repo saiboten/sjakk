@@ -12,23 +12,47 @@ class UpcomingMatch extends React.Component {
     super(props);
     this.state = {
       winner: 'white',
+      remisConfirmed: false,
+      whiteWonConfirmed: false,
+      blackWonConfirmed: false,
     };
 
-    this.changeWinner = this.changeWinner.bind(this);
     this.storeWinner = this.storeWinner.bind(this);
+    this.remisConfirm = this.remisConfirm.bind(this);
+    this.blackWon = this.blackWon.bind(this);
+    this.whiteWon = this.whiteWon.bind(this);
   }
 
-  changeWinner(e) {
-    debug('New vinner: ', e.target.value);
+  remisConfirm() {
+    if (this.state.remisConfirmed) {
+      this.storeWinner('remis');
+    }
     this.setState({
-      winner: e.target.value,
+      remisConfirmed: true,
     });
   }
 
-  storeWinner(e) {
-    e.preventDefault();
-    debug('Winner is ', this.state.winner);
-    ScoreCalculator.calculateScore(this.props.white, this.props.black, this.props.match, this.state.winner);
+  blackWon() {
+    if (this.state.blackWonConfirmed) {
+      this.storeWinner('black');
+    }
+    this.setState({
+      blackWonConfirmed: true,
+    });
+  }
+
+  whiteWon() {
+    if (this.state.whiteWonConfirmed) {
+      this.storeWinner('white');
+    }
+    this.setState({
+      whiteWonConfirmed: true,
+    });
+  }
+
+  storeWinner(winner) {
+    debug('Winner is ', winner);
+    ScoreCalculator.calculateScore(this.props.white, this.props.black, this.props.match, winner);
   }
 
   render() {
@@ -41,26 +65,19 @@ class UpcomingMatch extends React.Component {
     if (this.props.white) {
       renderThis = (
         <li className="flex-row space-between smallspace" key={match.id}>
-          <span className="completedMatch__tie">
+          <button className={this.state.whiteWonConfirmed ? 'completedMatch__won' : 'completedMatch__tie'} onClick={this.whiteWon}>
             <div className="flex-column">
               <div className="completedMatch__names">{this.props.white.name}</div>
               <div className="completedMatch__rating">({this.props.white.rating}) </div>
             </div>
-          </span>
-          <span className="completedMatch__tie">
+          </button>
+          <button className={this.state.blackWonConfirmed ? 'completedMatch__won' : 'completedMatch__tie'} onClick={this.blackWon}>
             <div className="flex-column">
               <div className="completedMatch__names">{this.props.black.name}</div>
               <div className="completedMatch__rating"> ({this.props.black.rating})</div>
             </div>
-          </span>
-          <form onSubmit={this.storeWinner}>
-            <select value={this.state.winner} onChange={this.changeWinner}>
-              <option value="white">{this.props.white.name} vant</option>
-              <option value="black">{this.props.black.name} vant</option>
-              <option value="remis">Remis/Uavgjort</option>
-            </select>
-            <input type="submit" value="Lagre" />
-          </form>
+          </button>
+          <button className="button" onClick={this.remisConfirm}>{this.state.remisConfirmed ? 'Bekreft remis' : 'Remis'}</button>
         </li>);
     }
 

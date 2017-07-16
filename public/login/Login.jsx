@@ -111,7 +111,6 @@ class Login extends React.Component {
     const continuePlease = (<div className="flex-column">
       <Link className="smallspace button" to="/users">Brukere</Link>
       <Link className="smallspace button" to="/tournaments">Turneringer</Link>
-      <Link className="smallspace button" to="/login">Logg ut</Link>
     </div>);
 
     const loginForm = (<form className="select-user__form" onSubmit={this.logIn} >
