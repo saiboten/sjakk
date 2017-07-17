@@ -18,7 +18,6 @@ class TournamentList extends React.Component {
             className="smallspace button"
             to={`/tournament/${tournament.id}`
           }
-
           >
             {tournament.name}
           </Link>

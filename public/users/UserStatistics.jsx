@@ -20,7 +20,7 @@ class UserStatistics extends React.Component {
   }
 
   componentDidMount() {
-    firebase.database().ref('users').on('value', (snapshot) => {
+    this.usersfb = firebase.database().ref('users').on('value', (snapshot) => {
       const users = snapshot.val();
       debug('Users', users);
       this.setState({
@@ -30,13 +30,18 @@ class UserStatistics extends React.Component {
       });
     });
 
-    firebase.database().ref('matches').on('value', (snapshot) => {
+    this.matchesfb = firebase.database().ref('matches').on('value', (snapshot) => {
       const matches = snapshot.val();
       debug('Matches', matches);
       this.setState({
         matches,
       });
     });
+  }
+
+  componentWillUnmount() {
+    this.usersfb.off();
+    this.matchesfb.off();
   }
 
   render() {

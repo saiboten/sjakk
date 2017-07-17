@@ -76,7 +76,7 @@ class Tournament extends React.Component {
       debug('Got matches: ', matchIdList);
       if (matchIdList) {
         const matches = firebase.database().ref('matches');
-        matches.once('value', (matchesSnapshot) => {
+        matches.on('value', (matchesSnapshot) => {
           const matchesWithData = matchesSnapshot.val();
 
           if (matchesWithData && matchIdList) {
