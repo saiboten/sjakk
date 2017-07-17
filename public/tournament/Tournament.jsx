@@ -51,7 +51,6 @@ class Tournament extends React.Component {
   componentWillUnmount() {
     this.fireBaseUser.off();
     this.tournamentMatches.off();
-    this.matches.off();
   }
 
   getUsers() {
@@ -70,29 +69,33 @@ class Tournament extends React.Component {
     });
   }
 
-
   getMatches() {
     this.tournamentMatches = firebase.database().ref(`tournaments/${this.props.match.params.id}/matches`);
     this.tournamentMatches.on('value', (snapshot) => {
       const matchIdList = snapshot.val();
       debug('Got matches: ', matchIdList);
+      if (matchIdList) {
+        const matches = firebase.database().ref('matches');
+        matches.once('value', (matchesSnapshot) => {
+          const matchesWithData = matchesSnapshot.val();
 
-      this.matches = firebase.database().ref('matches');
-      this.matches.on('value', (matchesSnapshot) => {
-        const matchesWithData = matchesSnapshot.val();
+          if (matchesWithData && matchIdList) {
+            const matchList = matchIdList.map(matchId => (
+              matchesWithData[matchId]
+            ));
 
-        if (matchesWithData && matchIdList) {
-          const matchList = matchIdList.map(matchId => (
-            matchesWithData[matchId]
-          ));
+            debug('Match list', matchList);
 
-          debug('Match list', matchList);
-
-          this.setState({
-            matches: matchList,
-          });
-        }
-      });
+            this.setState({
+              matches: matchList,
+            });
+          }
+        });
+      } else {
+        this.setState({
+          matches: [],
+        });
+      }
     });
   }
 

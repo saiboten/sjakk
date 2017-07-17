@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'; // ES6
 
 import firebase from '../firebase/FirebaseInit';
 import Container from '../container/Container';
+import UserMatchesList from './UserMatchesList';
 
 const debug = require('debug')('UserStatistics');
 
@@ -12,18 +13,20 @@ class UserStatistics extends React.Component {
     super(props);
     this.state = {
       user: {},
+      users: {},
       matchesPlayed: 0,
       matches: undefined,
     };
   }
 
   componentDidMount() {
-    firebase.database().ref(`users/${this.props.match.params.id}`).on('value', (snapshot) => {
-      const user = snapshot.val();
-      debug('User', user);
+    firebase.database().ref('users').on('value', (snapshot) => {
+      const users = snapshot.val();
+      debug('Users', users);
       this.setState({
-        user,
-        matchesPlayed: user.matches.length,
+        users,
+        user: users[this.props.match.params.id],
+        matchesPlayed: users[this.props.match.params.id].matches.length,
       });
     });
 
@@ -43,10 +46,9 @@ class UserStatistics extends React.Component {
     let ties = 0;
     let winsAsWhite = 0;
     let winsAsBlack = 0;
-    let ratingProgress = [];
 
-    if (this.state.user && this.state.matches) {
-      let userMatches = this.state.user.matches.map(match => (
+    if (this.state.matches && this.state.users) {
+      let userMatches = this.state.users[this.props.match.params.id].matches.map(match => (
         this.state.matches[match]
       ));
 
@@ -56,9 +58,9 @@ class UserStatistics extends React.Component {
 
       wins = userMatches.reduce((wonMatches, match) => {
         let won = 0;
-        if (match.white === this.state.user.id && match.whiteWon) {
+        if (match.white === this.props.match.params.id && match.whiteWon) {
           won = 1;
-        } else if (match.black === this.state.user.id && match.blackWon) {
+        } else if (match.black === this.props.match.params.id && match.blackWon) {
           won = 1;
         }
         return wonMatches + won;
@@ -66,9 +68,9 @@ class UserStatistics extends React.Component {
 
       losses = userMatches.reduce((lostMatches, match) => {
         let lost = 0;
-        if (match.white === this.state.user.id && match.blackWon) {
+        if (match.white === this.props.match.params.id && match.blackWon) {
           lost = 1;
-        } else if (match.black === this.state.user.id && match.whiteWon) {
+        } else if (match.black === this.props.match.params.id && match.whiteWon) {
           lost = 1;
         }
         return lostMatches + lost;
@@ -79,21 +81,14 @@ class UserStatistics extends React.Component {
       ), 0);
 
       winsAsBlack = userMatches.reduce((gamesTotal, match) => (
-        gamesTotal + (match.black === this.state.user.id && match.blackWon ? 1 : 0)
+        gamesTotal + (match.black === this.props.match.params.id && match.blackWon ? 1 : 0)
       ), 0);
 
       winsAsWhite = userMatches.reduce((gamesTotal, match) => (
-        gamesTotal + (match.white === this.state.user.id && match.whiteWon ? 1 : 0)
-      ), 0);
-
-      ratingProgress = userMatches.map(match => (
-        (<li>{(match.white === this.state.user.id ?
-          (match.whiteInitialRating + match.whiteRatingChange) : (match.blackInitialRating + match.blackRatingChange))}</li>)
+        gamesTotal + (match.white === this.props.match.params.id && match.whiteWon ? 1 : 0)
       ), 0);
 
       matches = this.state.matches.length;
-
-      debug('Rating progress: ', ratingProgress);
     }
 
     return (
@@ -111,8 +106,8 @@ class UserStatistics extends React.Component {
         </ul>
 
         <ul>
-          <h1>Rating progressjon</h1>
-          {ratingProgress}
+          <h1>Kamper</h1>
+          <UserMatchesList matches={this.state.matches} users={this.state.users} user={this.props.match.params.id} />
         </ul>
 
       </Container>);

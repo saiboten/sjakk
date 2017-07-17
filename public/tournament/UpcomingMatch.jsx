@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import firebase from '../firebase/FirebaseInit';
 import ScoreCalculator from './ScoreCalculator';
+import MatchHelper from './MatchHelper';
 
 const debug = require('debug')('UpcomingMatch');
 
@@ -17,12 +18,34 @@ class UpcomingMatch extends React.Component {
       remisConfirmed: false,
       whiteWonConfirmed: false,
       blackWonConfirmed: false,
+      confirmedDelete: false,
     };
 
     this.storeWinner = this.storeWinner.bind(this);
     this.remisConfirm = this.remisConfirm.bind(this);
     this.blackWon = this.blackWon.bind(this);
     this.whiteWon = this.whiteWon.bind(this);
+    this.cancelConfirmDelete = this.cancelConfirmDelete.bind(this);
+    this.confirmDelete = this.confirmDelete.bind(this);
+  }
+
+  confirmDelete() {
+    if (this.state.confirmedDelete) {
+      this.deleteMatch();
+    }
+
+    debug('Setting confirmedDelete to true');
+    this.setState({
+      confirmedDelete: true,
+    });
+  }
+
+  cancelConfirmDelete() {
+    debug('Setting confirmedDelete to false');
+
+    this.setState({
+      confirmedDelete: false,
+    });
   }
 
   remisConfirm() {
@@ -63,12 +86,34 @@ class UpcomingMatch extends React.Component {
     ScoreCalculator.calculateScore(this.props.white, this.props.black, this.props.match, winner);
   }
 
+  deleteMatch() {
+    firebase.database().ref(`matches/${this.props.match.id}`).once('value', (snapshot) => {
+      const matchInfo = snapshot.val();
+      debug('Deleting match: ', this.props.match.id, 'tournament', this.props.tournament);
+
+      MatchHelper.deleteListElementFromList(`tournaments/${this.props.tournament}/matches`, this.props.match.id);
+      MatchHelper.deleteListElementFromList(`users/${this.props.match.white}/matches`, this.props.match.id);
+      MatchHelper.deleteListElementFromList(`users/${this.props.match.black}/matches`, this.props.match.id);
+      firebase.database().ref(`matches/${this.props.match.id}`).remove();
+    });
+  }
+
   render() {
     const match = this.props.match;
 
     debug('this.props.white: ', this.props.white);
 
     let renderThis = (<li>Laster</li>);
+
+    const displayNone = {
+      display: 'none',
+    };
+
+    let confirmDeleteMatchButton = (<span style={displayNone} />);
+
+    if (this.state.confirmedDelete) {
+      confirmDeleteMatchButton = (<button className="button" onClick={this.cancelConfirmDelete}>N</button>);
+    }
 
     if (this.props.white) {
       renderThis = (
@@ -85,7 +130,9 @@ class UpcomingMatch extends React.Component {
               <div className="completedMatch__rating"> {this.props.black.rating}</div>
             </div>
           </button>
-          <button className="button upcomingMatch__remis_button" onClick={this.remisConfirm}>{this.state.remisConfirmed ? 'Bekreft' : 'Remis'}</button>
+          <button className="flex-column button upcomingMatch__remis_button" onClick={this.remisConfirm}>{this.state.remisConfirmed ? 'Bekreft' : 'Remis'}</button>
+          <span className="flex-column"><button className="button" onClick={this.confirmDelete}>{this.state.confirmedDelete ? 'Y' : 'X'}</button>{confirmDeleteMatchButton}</span>
+
         </li>);
     }
 
@@ -97,6 +144,7 @@ UpcomingMatch.propTypes = {
   match: PropTypes.object,
   white: PropTypes.object,
   black: PropTypes.object,
+  tournament: PropTypes.string,
 };
 
 export default UpcomingMatch;

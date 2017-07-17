@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import firebase from '../firebase/FirebaseInit';
+import MatchHelper from './MatchHelper';
 
 const debug = require('debug')('CompletedMatch');
 
@@ -9,24 +10,12 @@ require('./completedmatch.css');
 
 class CompletedMatch extends React.Component {
 
-  static deleteListElementFromList(ref, itemid) {
-    debug('Deleting match from users matchlist - ref', ref, '. itemid: ', itemid);
-    firebase.database().ref(ref).once('value', (snapshot) => {
-      const matchListWhite = snapshot.val();
-      const index = matchListWhite.indexOf(itemid);
-      if (index !== -1) {
-        debug('Found match to delete', matchListWhite, index);
-        matchListWhite.splice(index, 1);
-        firebase.database().ref(ref).set(matchListWhite);
-      }
-    });
-  }
-
   constructor(props) {
     super(props);
     this.deleteMatch = this.deleteMatch.bind(this);
     this.confirmDelete = this.confirmDelete.bind(this);
     this.cancelConfirmDelete = this.cancelConfirmDelete.bind(this);
+    this.restoreUserRatings = this.restoreUserRatings.bind(this);
 
     this.state = {
       confirmedDelete: false,
@@ -52,18 +41,33 @@ class CompletedMatch extends React.Component {
     });
   }
 
+  restoreUserRatings() {
+    firebase.datebase().ref(`users/${this.props.match.white}`).once('value', (snapshotUser) => {
+      const theUser = snapshotUser.val();
+      theUser.rating += this.props.match.whiteRatingChange;
+      firebase.datebase().ref(`users/${this.props.match.white}`).set(theUser);
+    });
+
+    firebase.datebase().ref(`users/${this.props.match.black}`).once('value', (snapshotUser) => {
+      const theUser = snapshotUser.val();
+      theUser.rating += this.props.match.blackRatingChange;
+      firebase.datebase().ref(`users/${this.props.match.black}`).set(theUser);
+    });
+  }
+
   deleteMatch() {
     firebase.database().ref(`matches/${this.props.match.id}`).once('value', (snapshot) => {
       const matchInfo = snapshot.val();
       debug('Deleting match: ', this.props.match.id, 'tournament', this.props.tournament);
 
-      CompletedMatch.deleteListElementFromList(`tournaments/${this.props.tournament}/matches`, this.props.match.id);
-      CompletedMatch.deleteListElementFromList(`users/${this.props.match.white}/matches`, this.props.match.id);
-      CompletedMatch.deleteListElementFromList(`users/${this.props.match.black}/matches`, this.props.match.id);
+      MatchHelper.deleteListElementFromList(`tournaments/${this.props.tournament}/matches`, this.props.match.id);
+      MatchHelper.deleteListElementFromList(`users/${this.props.match.white}/matches`, this.props.match.id);
+      MatchHelper.deleteListElementFromList(`users/${this.props.match.black}/matches`, this.props.match.id);
       firebase.database().ref(`matches/${this.props.match.id}`).remove();
 
-      if (matchInfo.completed) {
+      if (this.props.match.completed) {
         debug('Match is completed. We need to restore user ratings');
+        this.restoreUserRatings();
       }
     });
   }

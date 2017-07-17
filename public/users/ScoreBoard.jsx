@@ -32,7 +32,7 @@ class ScoreBoard extends React.Component {
     ));
 
     const scoreboardlist = copyList.map(user => (
-      (<li>{user.name} - {user.rating}</li>)
+      (<li key={user.id}>{user.name} - {user.rating}</li>)
     ));
 
     return (

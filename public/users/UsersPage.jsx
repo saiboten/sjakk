@@ -43,13 +43,13 @@ class UsersPage extends React.Component {
 
   render() {
     const users = this.state.users.map(user => (
-      <Link
+      <li key={user.id}><Link
         key={user.id}
         to={`/user/${user.id}`
       }
       >
         {user.name}
-      </Link>
+      </Link></li>
     ));
 
     return (
@@ -57,9 +57,9 @@ class UsersPage extends React.Component {
         <ScoreBoard />
         <AddUserForm />
         <h1>Brukere</h1>
-        <div className="flex-column space-between">
+        <ul className="flex-column space-between">
           {users}
-        </div>
+        </ul>
       </Container>);
   }
 }
