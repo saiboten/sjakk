@@ -44,12 +44,14 @@ class Tournament extends React.Component {
 
   componentDidMount() {
     this.getUsers();
-    this.getMatches();
+    this.setUpMatchesAndTournamentListener();
     this.addMatch = this.addMatch.bind(this);
+    this.setMatchList = this.setMatchList.bind(this);
   }
 
   componentWillUnmount() {
     this.fireBaseUser.off();
+    this.allMatches.off();
     this.tournamentMatches.off();
   }
 
@@ -69,34 +71,47 @@ class Tournament extends React.Component {
     });
   }
 
-  getMatches() {
-    this.tournamentMatches = firebase.database().ref(`tournaments/${this.props.match.params.id}/matches`);
-    this.tournamentMatches.on('value', (snapshot) => {
-      const matchIdList = snapshot.val();
-      debug('Got matches: ', matchIdList);
-      if (matchIdList) {
-        const matches = firebase.database().ref('matches');
-        matches.on('value', (matchesSnapshot) => {
-          const matchesWithData = matchesSnapshot.val();
+  setUpMatchesAndTournamentListener() {
+    this.allMatches = firebase.database().ref('matches');
+    this.allMatches.on('value', (snapshot) => {
+      const allMatches = snapshot.val();
 
-          if (matchesWithData && matchIdList) {
-            const matchList = matchIdList.map(matchId => (
-              matchesWithData[matchId]
-            ));
-
-            debug('Match list', matchList);
-
-            this.setState({
-              matches: matchList,
-            });
-          }
-        });
+      debug('Matches changed');
+      if (allMatches) {
+        this.allMatches = allMatches;
       } else {
-        this.setState({
-          matches: [],
-        });
+        this.allMatches = undefined;
+      }
+      this.setMatchList();
+    });
+
+    this.tournamentMatches = firebase.database().ref(`tournaments/${this.props.match.params.id}/matches`);
+    this.tournamentMatches.once('value', (snapshot) => {
+      const tournamentMatchesIDList = snapshot.val();
+      debug('Got matches: ', tournamentMatchesIDList);
+      if (tournamentMatchesIDList) {
+        this.tournamentMatchesIDList = tournamentMatchesIDList;
+        this.setMatchList();
       }
     });
+  }
+
+  setMatchList() {
+    if (this.tournamentMatchesIDList && this.tournamentMatchesIDList) {
+      const matchList = this.tournamentMatchesIDList.map(matchId => (
+        this.allMatches[matchId]
+      )).filter(match => (match));
+
+      debug('Match list', matchList);
+
+      this.setState({
+        matches: matchList,
+      });
+    } else {
+      this.setState({
+        matches: [],
+      });
+    }
   }
 
   addMatch(matchData) {
@@ -114,9 +129,9 @@ class Tournament extends React.Component {
 
     debug('New match data: ', newMatch);
 
-    Tournament.storeNewMatch(newMatch);
     Tournament.storeMatchInUserList(matchData.white, newMatch.id);
     Tournament.storeMatchInUserList(matchData.black, newMatch.id);
+    Tournament.storeNewMatch(newMatch);
 
     const tournamentMatches = firebase.database().ref(`tournaments/${this.props.match.params.id}/matches`);
 
