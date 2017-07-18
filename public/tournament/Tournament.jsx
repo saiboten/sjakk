@@ -50,14 +50,14 @@ class Tournament extends React.Component {
   }
 
   componentWillUnmount() {
-    this.fireBaseUser.off();
-    this.allMatches.off();
-    this.tournamentMatches.off();
+    this.fireBaseUsers.off();
+    this.allMatchesFb.off();
+    this.tournamentMatchesFb.off();
   }
 
   getUsers() {
-    this.fireBaseUser = firebase.database().ref('users');
-    this.fireBaseUser.on('value', (snapshot) => {
+    this.fireBaseUsers = firebase.database().ref('users');
+    this.fireBaseUsers.on('value', (snapshot) => {
       debug('Got users: ', snapshot.val());
 
       if (snapshot.val()) {
@@ -72,8 +72,8 @@ class Tournament extends React.Component {
   }
 
   setUpMatchesAndTournamentListener() {
-    this.allMatches = firebase.database().ref('matches');
-    this.allMatches.on('value', (snapshot) => {
+    this.allMatchesFb = firebase.database().ref('matches');
+    this.allMatchesFb.on('value', (snapshot) => {
       const allMatches = snapshot.val();
 
       debug('All matches list changed', allMatches);
@@ -85,8 +85,8 @@ class Tournament extends React.Component {
       this.setMatchList();
     });
 
-    this.tournamentMatches = firebase.database().ref(`tournaments/${this.props.match.params.id}/matches`);
-    this.tournamentMatches.on('value', (snapshot) => {
+    this.tournamentMatchesFb = firebase.database().ref(`tournaments/${this.props.match.params.id}/matches`);
+    this.tournamentMatchesFb.on('value', (snapshot) => {
       const tournamentMatchesIDList = snapshot.val();
       debug('List of matches in this tournament: ', tournamentMatchesIDList);
       if (tournamentMatchesIDList) {

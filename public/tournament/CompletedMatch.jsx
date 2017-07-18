@@ -47,16 +47,16 @@ class CompletedMatch extends React.Component {
     firebase.database().ref(`users/${this.props.match.white}`).once('value', (snapshotUser) => {
       const theUser = snapshotUser.val();
       debug('the white user and his previous rating', theUser, theUser.rating, this.props.match.whiteRatingChange);
-      theUser.rating += this.props.match.whiteRatingChange;
-      firebase.datebase().ref(`users/${this.props.match.white}`).set(theUser);
+      theUser.rating -= this.props.match.whiteRatingChange;
+      firebase.database().ref(`users/${this.props.match.white}`).set(theUser);
     });
 
     firebase.database().ref(`users/${this.props.match.black}`).once('value', (snapshotUser) => {
       const theUser = snapshotUser.val();
       debug('the black user and his previous rating', theUser, theUser.rating, this.props.match.blackRatingChange);
-      theUser.rating += this.props.match.blackRatingChange;
+      theUser.rating -= this.props.match.blackRatingChange;
 
-      firebase.datebase().ref(`users/${this.props.match.black}`).set(theUser);
+      firebase.database().ref(`users/${this.props.match.black}`).set(theUser);
     });
   }
 
