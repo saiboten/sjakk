@@ -76,7 +76,7 @@ class Tournament extends React.Component {
     this.allMatches.on('value', (snapshot) => {
       const allMatches = snapshot.val();
 
-      debug('Matches changed');
+      debug('All matches list changed', allMatches);
       if (allMatches) {
         this.allMatches = allMatches;
       } else {
@@ -86,9 +86,9 @@ class Tournament extends React.Component {
     });
 
     this.tournamentMatches = firebase.database().ref(`tournaments/${this.props.match.params.id}/matches`);
-    this.tournamentMatches.once('value', (snapshot) => {
+    this.tournamentMatches.on('value', (snapshot) => {
       const tournamentMatchesIDList = snapshot.val();
-      debug('Got matches: ', tournamentMatchesIDList);
+      debug('List of matches in this tournament: ', tournamentMatchesIDList);
       if (tournamentMatchesIDList) {
         this.tournamentMatchesIDList = tournamentMatchesIDList;
         this.setMatchList();
@@ -97,12 +97,12 @@ class Tournament extends React.Component {
   }
 
   setMatchList() {
-    if (this.tournamentMatchesIDList && this.tournamentMatchesIDList) {
+    if (this.tournamentMatchesIDList && this.allMatches) {
       const matchList = this.tournamentMatchesIDList.map(matchId => (
         this.allMatches[matchId]
       )).filter(match => (match));
 
-      debug('Match list', matchList);
+      debug('Match list after filtering and stuff', matchList);
 
       this.setState({
         matches: matchList,
