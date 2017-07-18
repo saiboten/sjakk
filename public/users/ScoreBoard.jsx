@@ -31,7 +31,7 @@ class ScoreBoard extends React.Component {
       a.rating < b.rating
     ));
 
-    const scoreboardlist = copyList.map(user => (
+    const scoreboardlist = copyList.filter(user => (user.matches && user.matches.length > 0)).map(user => (
       (<li key={user.id}>{user.name} - {user.rating}</li>)
     ));
 
