@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { connect } from 'react-redux';
 import TournamentRegistration from './TournamentRegistration';
 import TournamentList from './TournamentList';
 import firebase from '../firebase/FirebaseInit';

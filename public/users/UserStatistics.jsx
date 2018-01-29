@@ -26,7 +26,6 @@ class UserStatistics extends React.Component {
       this.setState({
         users,
         user: users[this.props.match.params.id],
-        matchesPlayed: users[this.props.match.params.id].matches.length,
       });
     });
 
